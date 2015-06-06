@@ -1,0 +1,1 @@
+compartir la base de datos en esta carpeta
