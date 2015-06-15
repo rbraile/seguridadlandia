@@ -36,7 +36,11 @@ function ShowUsuarios(usuariosJSON) {
 
 function loginUsuario(usuario, clave) {
     $.post( "http://www.seguridadlandia.com/api/login", { nombre: usuario, password: clave } )
-        .done(function( data ) {
-            alert( "Data Loaded: " + data );
+        .done(function( respuesta ) {
+            if(respuesta) {
+                alert(respuesta);
+            } else {
+                alert("no vino nada");
+            }
         });
 }
