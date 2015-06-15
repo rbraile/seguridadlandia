@@ -18,7 +18,6 @@ class DatabaConnect {
               $rowsJSON[] = $row;
             }
             return json_encode($rowsJSON);   
-            $result->free();
         }
 
     }
