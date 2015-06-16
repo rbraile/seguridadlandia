@@ -1,9 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>seguridadlandia</title>
+	<title>seguridadlandia con jquery</title>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/usuarios.js"></script>
 </head>
 <body>
-<h1>Esto es el sitio de seguridadlandia</h1>
+<h1>Bienvenidos a segurilandia</h1>
+
+<form id="login" method="POST">
+	<label>
+		usuario
+		<input class="usuario" type="text" name="usuario" />
+	</label>
+	<label>
+		clave
+		<input class="clave" type="password" name="clave" />
+	</label>
+	<input id="enviar" type="submit" name="enviar" value="enviar" />
+</form>
+
+<h3>Tabla usuarios</h3>
+<div class="usuarios">
+	<table>
+		
+	</table>
+</div>
 </body>
 </html>
