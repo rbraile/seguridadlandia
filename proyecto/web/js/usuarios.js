@@ -1,5 +1,17 @@
 (function($) {
     $(document).ready(function() {
+        $('input[name=nombre]').val('pedro');
+        $('input[name=apellido]').val('picapiedra');
+        $('input[name=dni]').val('99999999');
+        $('input[name=email]').val('pedro@picapiedra.com');
+        $('input[name=telefono]').val('44667789');
+        $('input[name=password]').val('pedro');
+        $('input[name=password2]').val('pedro');
+        $('input[name=calle]').val('arieta');
+        $('input[name=numero]').val('1234');
+
+
+
         $.ajax({
           method: "GET",
           url: "http://www.seguridadlandia.com/api/usuario"
@@ -10,13 +22,68 @@
 
         $("#login").submit(function(event) {
             event.preventDefault();
-            event.stopPropagation();
             var usuario = $("input[name=usuario]").val();
             var clave = $("input[name=clave]").val();
             if(usuario != "" && clave != "") {
                 loginUsuario(usuario, clave);
             }
+            return false;
         })
+
+        $("#token").click(function() {
+             $.ajax({
+                  method: "GET",
+                  url: "http://www.seguridadlandia.com/api/hashToken?id=2",
+                })
+                .done(function( token ) {
+                    alert(token)
+                });
+        });
+
+        // $("#password2").change(function() {
+        //     if($("#password2").val() === $("#password").val()) {
+        //         alert("son iguales");
+        //     } else {
+        //         alert("NO son iguales");
+        //     }
+        // });
+
+        $("#register").submit(function(event) {
+            event.preventDefault();
+            var fields = {};
+            // poner todo esto abajo en el objeto
+                var nombre = $('input[name=nombre]').val();
+                var apellido = $('input[name=apellido]').val();
+                var dni = $('input[name=dni]').val();
+                var email = $('input[name=email]').val();
+                var telefono = $('input[name=telefono]').val();
+                var password = $('input[name=password]').val();
+                var password2 = $('input[name=password2]').val();
+                var calle = $('input[name=calle]').val();
+                var numero = $('input[name=numero]').val();
+                var tipo_usuario = this.tipo_usuario.value;
+                
+
+                fields.nombre = nombre;
+                fields.apellido = apellido;
+                fields.dni = dni;
+                fields.email = email;
+                fields.telefono = telefono;
+                fields.password = password;
+                fields.calle = calle;
+                fields.numero = numero;
+                fields.tipo_usuario = tipo_usuario;
+
+                
+                $.ajax({
+                  method: "POST",
+                  data: JSON.stringify(fields),
+                  url: "http://www.seguridadlandia.com/api/usuario"
+                })
+                .done(function( usuarios ) {
+                    console.log(usuarios);
+                });           
+        });
 
     });
 
@@ -26,10 +93,10 @@
 function ShowUsuarios(usuariosJSON) {
     var usuarios = eval(usuariosJSON);
     $.each(usuarios, function( index, usuario){
-        $(".usuarios table").append("<tr></td>" 
+        $(".usuarios table").append("<tr><td>" 
             + usuario.nombre + "</td><td>" 
             + usuario.apellido + "</td><td>" 
-            + usuario.password + "</td><td>" 
+            + usuario.dni + "</td><td>" 
             + usuario.email + "</td><td></tr>");
     });
 }
@@ -40,7 +107,7 @@ function loginUsuario(usuario, clave) {
             if(respuesta) {
                 alert(respuesta);
             } else {
-                alert("no vino nada");
+                $(".error-login").append("Verifica los datos ingresados");
             }
         });
 }
