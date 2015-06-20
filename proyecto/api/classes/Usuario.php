@@ -2,7 +2,7 @@
 
 class Usuario {
 
-	public function instertUser($connection, $nombre, $password) {
+	public function addtUser($connection, $nombre, $password) {
 		$query = "SELECT id, nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero 
 	                FROM usuario 
 	                WHERE nombre = '$nombre' 
@@ -29,8 +29,13 @@ class Usuario {
 					            '$fields->numero',
 					            '$fields->tipo_usuario'
 							)";
-		var_dump($query);
     	return $connection->DBQuery($query);
+	}
+
+	public function getAllUsers($connection) {
+		$query = "SELECT nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario";
+		$result = $connection->DBQuery($query);
+		return $connection->getResultJSONEncode($result);
 	}
 
 }

@@ -1,8 +1,8 @@
 <?php 
-require_once('database/DatabaConnect.php');
 require("vendor/slim/slim/Slim/Slim.php");
 require("classes/Token.php");
 require("classes/Usuario.php");
+require("classes/Contrato.php");
  
 \Slim\Slim::registerAutoloader();
 
@@ -13,38 +13,46 @@ $app = new \Slim\Slim(array(
 ));
 
 // traer todos usuarios
-$app->get('/usuario', 'usuarios');
+$app->get('/usuario', 'showUsers');
+$app->post('/usuario', 'addtUser');
 
 // traer un usuario
-// $app->get('/usuario:$id', 'usuarios');
+// $app->get('/usuario/:$id', 'usuarios');
 
-$app->post('/usuario', 'insertUser');
+$app->post('/contrato', 'addContract');
+
 $app->post('/login', 'login');
 $app->get('/hashToken', 'hashToken');
 
 $app->run();
 
-function insertUser() {
+function addtUser() {
     $app = \Slim\Slim::getInstance();
-    $connection = new DatabaConnect();
+    $connection = new DatabaConnect(); 
     $fields = json_decode($app->request->getBody());
     $user = new Usuario();
     $user->setUser($connection, $fields);
+}
 
+function addContract() {
+    $app = \Slim\Slim::getInstance();
+    $contrato = new Contrato(); 
+    $fields = json_decode($app->request->getBody());
+    $idContract = $contrato->setContract($fields);
+    if($idContract != 0) {
+        $contrato->addElements($fields->plan, $idContract);
+    } else {
+        echo "no se pudo ingresar el contrato";
+    }
 
 }
 
-
-function usuarios() {
+function showUsers() {
     $app = \Slim\Slim::getInstance();
     $connection = new DatabaConnect();
-    $query = "SELECT nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario";
-    $resultado = $connection->DBQuery($query);
-
-    // $app->response->headers->set("Content-type", "application/json");
-    // $app->response->status(200);
-    // $app->response->body(json_encode($resulado));
-    echo  $connection->getResultJSONEncode($resultado);
+    $usuario = new Usuario();
+    $resultado = $usuario->getAllUsers($connection);
+    echo  $resultado;
 }
 
 function hashToken() {
