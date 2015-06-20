@@ -1,6 +1,8 @@
 <?php 
-include_once('database/DatabaConnect.php');
+require_once('database/DatabaConnect.php');
 require("vendor/slim/slim/Slim/Slim.php");
+require("classes/Token.php");
+require("classes/Usuario.php");
  
 \Slim\Slim::registerAutoloader();
 
@@ -10,37 +12,67 @@ $app = new \Slim\Slim(array(
     'templates.path' => './alt_templates/'
 ));
 
+// traer todos usuarios
 $app->get('/usuario', 'usuarios');
-$app->post('/login', 'login');
 
-$app->post("/login/", function() use($app) {});
+// traer un usuario
+// $app->get('/usuario:$id', 'usuarios');
+
+$app->post('/usuario', 'insertUser');
+$app->post('/login', 'login');
+$app->get('/hashToken', 'hashToken');
 
 $app->run();
+
+function insertUser() {
+    $app = \Slim\Slim::getInstance();
+    $connection = new DatabaConnect();
+    $fields = json_decode($app->request->getBody());
+    $user = new Usuario();
+    $user->setUser($connection, $fields);
+
+
+}
+
 
 function usuarios() {
     $app = \Slim\Slim::getInstance();
     $connection = new DatabaConnect();
     $query = "SELECT nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario";
-    $resutlado = $connection->DBQuery($query);
+    $resultado = $connection->DBQuery($query);
 
+    // $app->response->headers->set("Content-type", "application/json");
+    // $app->response->status(200);
+    // $app->response->body(json_encode($resulado));
+    echo  $connection->getResultJSONEncode($resultado);
+}
 
-    $app->response->headers->set("Content-type", "application/json");
-    $app->response->status(200);
-    $app->response->body(json_encode($resutlado));
-
-    // echo $resutlado;
+function hashToken() {
+    $app = \Slim\Slim::getInstance();
+    $id = $app->request->get("id");
+    $token = new Token();
+    $connection = new DatabaConnect();
+    echo $token->getHashToken($connection, $id);
 }
 
 function login() {
     $app = \Slim\Slim::getInstance();
-    $nombre = $app->request->post("nombre");
-    $password = md5($app->request->post("password"));
+    $passwodToken = new Token();
     $connection = new DatabaConnect();
-    $query = "SELECT nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero 
-                FROM usuario 
-                WHERE nombre = '$nombre' 
-                AND password = '$password'";
-    $resutlado = $connection->DBQuery($query);
-    echo $resutlado;
+    $usuario = new Usuario();
+
+    $nombre = $app->request->post("nombre");
+    $password = $passwodToken->createPasswordToken($app->request->post("password"));    
+    $resultado = $usuario->instertUser($connection, $nombre, $password);
+
+    if($resultado->num_rows == 1) {
+        $newToken = new Token(); 
+        $hashtoken = $newToken->createRandomToken();
+        $data_user = $resultado->fetch_assoc();
+        $id = $data_user['id'];        
+        $result = $usuario->setUserToken($id, $hashtoken);
+        echo $result;
+    }
 }
 
+    
