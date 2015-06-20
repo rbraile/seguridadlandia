@@ -50,31 +50,19 @@
 
         $("#register").submit(function(event) {
             event.preventDefault();
-            var fields = {};
-            // poner todo esto abajo en el objeto
-                var nombre = $('input[name=nombre]').val();
-                var apellido = $('input[name=apellido]').val();
-                var dni = $('input[name=dni]').val();
-                var email = $('input[name=email]').val();
-                var telefono = $('input[name=telefono]').val();
-                var password = $('input[name=password]').val();
+                var fields = {};
                 var password2 = $('input[name=password2]').val();
-                var calle = $('input[name=calle]').val();
-                var numero = $('input[name=numero]').val();
-                var tipo_usuario = this.tipo_usuario.value;
-                
 
-                fields.nombre = nombre;
-                fields.apellido = apellido;
-                fields.dni = dni;
-                fields.email = email;
-                fields.telefono = telefono;
-                fields.password = password;
-                fields.calle = calle;
-                fields.numero = numero;
-                fields.tipo_usuario = tipo_usuario;
-
-                
+                fields.nombre = $('input[name=nombre]').val();
+                fields.apellido = $('input[name=apellido]').val();
+                fields.dni = $('input[name=dni]').val();
+                fields.email = $('input[name=email]').val();
+                fields.telefono = $('input[name=telefono]').val();
+                fields.password = $('input[name=password]').val();
+                fields.calle = $('input[name=calle]').val();
+                fields.numero = $('input[name=numero]').val();
+                fields.tipo_usuario = this.tipo_usuario.value;
+   
                 $.ajax({
                   method: "POST",
                   data: JSON.stringify(fields),
