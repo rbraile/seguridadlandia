@@ -93,7 +93,12 @@ function loginUsuario(usuario, clave) {
     $.post( "http://www.seguridadlandia.com/api/login", { nombre: usuario, password: clave } )
         .done(function( respuesta ) {
             if(respuesta) {
-                alert(respuesta);
+                respuesta =JSON.parse(respuesta);
+                var objFecha = new Date();
+                objFecha.setTime(objFecha.getTime()+(60*1000));
+                var strExpiracion = objFecha.toGMTString();
+                document.cookie = 'token=' + respuesta.token + ';expires=' + strExpiracion;
+                //document.location = respuesta.redirect;
             } else {
                 $(".error-login").append("Verifica los datos ingresados");
             }
