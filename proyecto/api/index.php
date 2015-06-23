@@ -14,7 +14,7 @@ $app = new \Slim\Slim(array(
 
 // traer todos usuarios
 $app->get('/usuario', 'showUsers');
-$app->post('/usuario', 'addtUser');
+$app->post('/usuario', 'addUser');
 
 // traer un usuario
 // $app->get('/usuario/:$id', 'usuarios');
@@ -26,12 +26,16 @@ $app->get('/hashToken', 'hashToken');
 
 $app->run();
 
-function addtUser() {
+function addUser() {
     $app = \Slim\Slim::getInstance();
-    $connection = new DatabaConnect(); 
     $fields = json_decode($app->request->getBody());
     $user = new Usuario();
-    $user->setUser($connection, $fields);
+    $message = "no se a podido registrar el usuario, intentelo nuevamente";
+    
+    if($user->addUser($fields)) {
+        $message = "usuario registrado con exito";
+    }
+    echo $message;
 }
 
 function addContract() {
@@ -44,14 +48,12 @@ function addContract() {
     } else {
         echo "no se pudo ingresar el contrato";
     }
-
 }
 
 function showUsers() {
     $app = \Slim\Slim::getInstance();
-    $connection = new DatabaConnect();
     $usuario = new Usuario();
-    $resultado = $usuario->getAllUsers($connection);
+    $resultado = $usuario->getAllUsers();
     echo  $resultado;
 }
 
@@ -59,27 +61,42 @@ function hashToken() {
     $app = \Slim\Slim::getInstance();
     $id = $app->request->get("id");
     $token = new Token();
-    $connection = new DatabaConnect();
-    echo $token->getHashToken($connection, $id);
+    echo $token->getHashToken($id);
 }
 
 function login() {
     $app = \Slim\Slim::getInstance();
     $passwodToken = new Token();
-    $connection = new DatabaConnect();
     $usuario = new Usuario();
 
     $nombre = $app->request->post("nombre");
     $password = $passwodToken->createPasswordToken($app->request->post("password"));    
-    $resultado = $usuario->instertUser($connection, $nombre, $password);
+    $resultado = $usuario->loginUser($nombre, $password);
 
     if($resultado->num_rows == 1) {
+        $data_user = $resultado->fetch_assoc();
         $newToken = new Token(); 
         $hashtoken = $newToken->createRandomToken();
-        $data_user = $resultado->fetch_assoc();
-        $id = $data_user['id'];        
-        $result = $usuario->setUserToken($id, $hashtoken);
-        echo $result;
+        $userType = $data_user['tipo_usuario'];
+        $id = $data_user['id'];
+        if($usuario->setUserToken($id, $hashtoken)) {
+        	switch ($userType) {
+        		case 'admin':
+        			$datos = json_encode(array("redirect" => "/admin", "token" => $hashtoken));
+        			break;
+        		case 'cliente':
+        			break;
+        		case 'vigilador':
+        			break;
+        		case 'monitoreador':
+        			break;
+        		
+        		default:
+        			break;
+        	}
+        	echo $datos;
+
+        }
     }
 }
 
