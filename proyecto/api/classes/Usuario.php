@@ -34,13 +34,26 @@ class Usuario {
                                 '$fields->numero',
                                 '$fields->tipo_usuario'
                             )";
-        return $this->conection->DBQuery($query);
+        $result = $this->conection->DBQuery($query);
+
+        return $this->conection->getLastId();
     }
 
     public function getAllUsers() {
-        $query = "SELECT nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario";
+        $query = "SELECT id, nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario";
         $result = $this->conection->DBQuery($query);
         return $this->conection->getResultJSONEncode($result);
+    }
+
+    public function getUserById($id) {
+        $query = "SELECT nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario WHERE id = $id";
+        $result = $this->conection->DBQuery($query);
+        return $this->conection->getResultJSONEncode($result);
+    }
+
+    public function userExist($id) {
+        $query = "SELECT 1 FROM usuario WHERE id = $id";
+        return $this->conection->DBQuery($query);
     }
 
 }

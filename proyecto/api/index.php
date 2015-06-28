@@ -1,8 +1,10 @@
 <?php 
+
 require("vendor/slim/slim/Slim/Slim.php");
 require("classes/Token.php");
 require("classes/Usuario.php");
 require("classes/Contrato.php");
+require("classes/Cliente.php");
  
 \Slim\Slim::registerAutoloader();
 
@@ -15,6 +17,9 @@ $app = new \Slim\Slim(array(
 // traer todos usuarios
 $app->get('/usuario', 'showUsers');
 $app->post('/usuario', 'addUser');
+$app->get('/usuario/:id', function($id) {
+    getUser($id);
+});
 
 // traer un usuario
 // $app->get('/usuario/:$id', 'usuarios');
@@ -22,18 +27,43 @@ $app->post('/usuario', 'addUser');
 $app->post('/contrato', 'addContract');
 
 $app->post('/login', 'login');
+$app->get('/logout', 'logout');
 $app->get('/hashToken', 'hashToken');
 
 $app->run();
+
+function getUser($id) {
+    $user = new Usuario();
+    if($user->userExist($id)) {
+        $result = $user->getUserById($id);
+        echo $result;
+    } else {
+        echo false;
+    }
+}
+
+function logout() {
+    $app = \Slim\Slim::getInstance();
+
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    session_destroy();
+    echo "redirect";
+}
 
 function addUser() {
     $app = \Slim\Slim::getInstance();
     $fields = json_decode($app->request->getBody());
     $user = new Usuario();
-    $message = "no se a podido registrar el usuario, intentelo nuevamente";
-    
+    $message = false;
     if($user->addUser($fields)) {
-        $message = "usuario registrado con exito";
+        $message = true;
+    }
+    $result = $user->addUser($fields);
+    if($result > 0 && $fields->tipo_usuario == 'cliente') {
+        $cliente = new Cliente();
+        $cliente->addClienteRelation($result, 1);
     }
     echo $message;
 }
@@ -70,7 +100,8 @@ function login() {
     $usuario = new Usuario();
 
     $nombre = $app->request->post("nombre");
-    $password = $passwodToken->createPasswordToken($app->request->post("password"));    
+
+    $password = $passwodToken->createPasswordToken($app->request->post("password"));
     $resultado = $usuario->loginUser($nombre, $password);
 
     if($resultado->num_rows == 1) {
@@ -79,25 +110,19 @@ function login() {
         $hashtoken = $newToken->createRandomToken();
         $userType = $data_user['tipo_usuario'];
         $id = $data_user['id'];
-        if($usuario->setUserToken($id, $hashtoken)) {
-        	switch ($userType) {
-        		case 'admin':
-        			$datos = json_encode(array("redirect" => "/admin", "token" => $hashtoken));
-        			break;
-        		case 'cliente':
-        			break;
-        		case 'vigilador':
-        			break;
-        		case 'monitoreador':
-        			break;
-        		
-        		default:
-        			break;
-        	}
-        	echo $datos;
-
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
         }
+
+        $_SESSION["login"] = true;
+        $_SESSION["user_type"] = $userType;
+
+        echo $userType;
+
+    } else {
+        echo "";
     }
 }
+
 
     

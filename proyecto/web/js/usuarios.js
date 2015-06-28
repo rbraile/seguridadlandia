@@ -10,8 +10,6 @@
         $('input[name=calle]').val('arieta');
         $('input[name=numero]').val('1234');
 
-
-
         $.ajax({
           method: "GET",
           url: "http://www.seguridadlandia.com/api/usuario"
@@ -20,10 +18,15 @@
             ShowUsuarios(usuarios);
         });
 
+        $(".logout").click(function() {
+            logout();
+        });
+
         $("#login").submit(function(event) {
             event.preventDefault();
             var usuario = $("input[name=usuario]").val();
             var clave = $("input[name=clave]").val();
+
             if(usuario != "" && clave != "") {
                 loginUsuario(usuario, clave);
             }
@@ -66,7 +69,7 @@
                 $.ajax({
                   method: "POST",
                   data: JSON.stringify(fields),
-                  url: "http://www.seguridadlandia.com/api/usuario"
+                  url: "/api/usuario"
                 })
                 .done(function( usuarios ) {
                     console.log(usuarios);
@@ -77,6 +80,16 @@
 
 })(jQuery);
 
+function logout() {
+    $.ajax({
+      method: "GET",
+      url: "/api/logout"
+    })
+    .done(function( msg ) {
+        var url = "/";
+        window.location = url;
+    });
+}
 
 function ShowUsuarios(usuariosJSON) {
     var usuarios = eval(usuariosJSON);
@@ -90,17 +103,13 @@ function ShowUsuarios(usuariosJSON) {
 }
 
 function loginUsuario(usuario, clave) {
-    $.post( "http://www.seguridadlandia.com/api/login", { nombre: usuario, password: clave } )
+    $.post( "/api/login", { nombre: usuario, password: clave } )
         .done(function( respuesta ) {
             if(respuesta) {
-                respuesta =JSON.parse(respuesta);
-                var objFecha = new Date();
-                objFecha.setTime(objFecha.getTime()+(60*1000));
-                var strExpiracion = objFecha.toGMTString();
-                document.cookie = 'token=' + respuesta.token + ';expires=' + strExpiracion;
-                //document.location = respuesta.redirect;
+                var url = "/web/" + respuesta;
+                window.location = url;
             } else {
-                $(".error-login").append("Verifica los datos ingresados");
+                $(".error-login").html("Verifica los datos ingresados");
             }
         });
 }
