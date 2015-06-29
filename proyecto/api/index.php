@@ -1,8 +1,10 @@
 <?php 
-require_once('database/DatabaConnect.php');
+
 require("vendor/slim/slim/Slim/Slim.php");
 require("classes/Token.php");
 require("classes/Usuario.php");
+require("classes/Contrato.php");
+require("classes/Cliente.php");
  
 \Slim\Slim::registerAutoloader();
 
@@ -13,66 +15,114 @@ $app = new \Slim\Slim(array(
 ));
 
 // traer todos usuarios
-$app->get('/usuario', 'usuarios');
+$app->get('/usuario', 'showUsers');
+$app->post('/usuario', 'addUser');
+$app->get('/usuario/:id', function($id) {
+    getUser($id);
+});
 
 // traer un usuario
-// $app->get('/usuario:$id', 'usuarios');
+// $app->get('/usuario/:$id', 'usuarios');
 
-$app->post('/usuario', 'insertUser');
+$app->post('/contrato', 'addContract');
+
 $app->post('/login', 'login');
+$app->get('/logout', 'logout');
 $app->get('/hashToken', 'hashToken');
 
 $app->run();
 
-function insertUser() {
-    $app = \Slim\Slim::getInstance();
-    $connection = new DatabaConnect();
-    $fields = json_decode($app->request->getBody());
+function getUser($id) {
     $user = new Usuario();
-    $user->setUser($connection, $fields);
-
-
+    if($user->userExist($id)) {
+        $result = $user->getUserById($id);
+        echo $result;
+    } else {
+        echo false;
+    }
 }
 
-
-function usuarios() {
+function logout() {
     $app = \Slim\Slim::getInstance();
-    $connection = new DatabaConnect();
-    $query = "SELECT nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario";
-    $resultado = $connection->DBQuery($query);
 
-    // $app->response->headers->set("Content-type", "application/json");
-    // $app->response->status(200);
-    // $app->response->body(json_encode($resulado));
-    echo  $connection->getResultJSONEncode($resultado);
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    session_destroy();
+    echo "redirect";
+}
+
+function addUser() {
+    $app = \Slim\Slim::getInstance();
+    $fields = json_decode($app->request->getBody());
+    $user = new Usuario();
+    $message = false;
+    if($user->addUser($fields)) {
+        $message = true;
+    }
+    $result = $user->addUser($fields);
+    if($result > 0 && $fields->tipo_usuario == 'cliente') {
+        $cliente = new Cliente();
+        $cliente->addClienteRelation($result, 1);
+    }
+    echo $message;
+}
+
+function addContract() {
+    $app = \Slim\Slim::getInstance();
+    $contrato = new Contrato(); 
+    $fields = json_decode($app->request->getBody());
+    $idContract = $contrato->setContract($fields);
+    if($idContract != 0) {
+        $contrato->addElements($fields->plan, $idContract);
+    } else {
+        echo "no se pudo ingresar el contrato";
+    }
+}
+
+function showUsers() {
+    $app = \Slim\Slim::getInstance();
+    $usuario = new Usuario();
+    $resultado = $usuario->getAllUsers();
+    echo  $resultado;
 }
 
 function hashToken() {
     $app = \Slim\Slim::getInstance();
     $id = $app->request->get("id");
     $token = new Token();
-    $connection = new DatabaConnect();
-    echo $token->getHashToken($connection, $id);
+    echo $token->getHashToken($id);
 }
 
 function login() {
     $app = \Slim\Slim::getInstance();
     $passwodToken = new Token();
-    $connection = new DatabaConnect();
     $usuario = new Usuario();
 
     $nombre = $app->request->post("nombre");
-    $password = $passwodToken->createPasswordToken($app->request->post("password"));    
-    $resultado = $usuario->instertUser($connection, $nombre, $password);
+
+    $password = $passwodToken->createPasswordToken($app->request->post("password"));
+    $resultado = $usuario->loginUser($nombre, $password);
 
     if($resultado->num_rows == 1) {
+        $data_user = $resultado->fetch_assoc();
         $newToken = new Token(); 
         $hashtoken = $newToken->createRandomToken();
-        $data_user = $resultado->fetch_assoc();
-        $id = $data_user['id'];        
-        $result = $usuario->setUserToken($id, $hashtoken);
-        echo $result;
+        $userType = $data_user['tipo_usuario'];
+        $id = $data_user['id'];
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION["login"] = true;
+        $_SESSION["user_type"] = $userType;
+
+        echo $userType;
+
+    } else {
+        echo "";
     }
 }
+
 
     

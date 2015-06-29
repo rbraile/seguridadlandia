@@ -1,8 +1,14 @@
 <?php
+require_once('database/DatabaConnect.php');
 
 Class Token {
 
 	private $hashToken;
+	private $conection;
+
+	public function Token() {
+		$this->conection =  new DatabaConnect();
+	}
 
 	public function createPasswordToken($string) {
 		return md5($string);
@@ -20,13 +26,13 @@ Class Token {
 	    return $this->hashToken;
 	}
 
-	public function getHashToken($connection, $id) {
-		return $this->findTokenUser($connection, $id);
+	public function getHashToken($id) {
+		return $this->findTokenUser($id);
 	}
 
-	public function findTokenUser($connection, $id) {
+	public function findTokenUser($id) {
 		$query = "SELECT hashToken FROM token WHERE id = $id ORDER BY id ASC LIMIT 1";
-		$result = $connection->DBQuery($query);
+		$result = $this->conection->DBQuery($query);
 		$token = $result->fetch_assoc();
 		return $token['hashToken']; 
 	}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>seguridadlandia con jquery</title>
+	<script type="text/javascript" src="js/lib/jquery.js"></script>
+	<script type="text/javascript" src="js/contratos.js"></script>
+</head>
+<body>
+<h1>Agregar contrato</h1>
+
+<form id="contrato" method="POST">
+	<p class="error" style="color: red;"></p>
+	<label>
+		id_cliente 
+		<input type="text" name="id_cliente" /><br />
+	</label>
+	<label>
+		id_hogar
+		<input type="text" name="id_hogar" /><br />
+	</label>	
+	<label>
+		plan
+		<select class="plan" name="plan">
+			<option value="1">Basico</option>
+			<option value="2">Premiun</option>
+			<option value="3">Gold</option>
+		</select>
+		<br />
+	</label>
+
+	<input id="enviar" type="submit" name="enviar" value="enviar" />
+</form>
+
+</body>
+</html>

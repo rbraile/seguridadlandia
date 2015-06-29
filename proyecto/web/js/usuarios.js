@@ -10,8 +10,6 @@
         $('input[name=calle]').val('arieta');
         $('input[name=numero]').val('1234');
 
-
-
         $.ajax({
           method: "GET",
           url: "http://www.seguridadlandia.com/api/usuario"
@@ -20,10 +18,15 @@
             ShowUsuarios(usuarios);
         });
 
+        $(".logout").click(function() {
+            logout();
+        });
+
         $("#login").submit(function(event) {
             event.preventDefault();
             var usuario = $("input[name=usuario]").val();
             var clave = $("input[name=clave]").val();
+
             if(usuario != "" && clave != "") {
                 loginUsuario(usuario, clave);
             }
@@ -50,35 +53,23 @@
 
         $("#register").submit(function(event) {
             event.preventDefault();
-            var fields = {};
-            // poner todo esto abajo en el objeto
-                var nombre = $('input[name=nombre]').val();
-                var apellido = $('input[name=apellido]').val();
-                var dni = $('input[name=dni]').val();
-                var email = $('input[name=email]').val();
-                var telefono = $('input[name=telefono]').val();
-                var password = $('input[name=password]').val();
+                var fields = {};
                 var password2 = $('input[name=password2]').val();
-                var calle = $('input[name=calle]').val();
-                var numero = $('input[name=numero]').val();
-                var tipo_usuario = this.tipo_usuario.value;
-                
 
-                fields.nombre = nombre;
-                fields.apellido = apellido;
-                fields.dni = dni;
-                fields.email = email;
-                fields.telefono = telefono;
-                fields.password = password;
-                fields.calle = calle;
-                fields.numero = numero;
-                fields.tipo_usuario = tipo_usuario;
-
-                
+                fields.nombre = $('input[name=nombre]').val();
+                fields.apellido = $('input[name=apellido]').val();
+                fields.dni = $('input[name=dni]').val();
+                fields.email = $('input[name=email]').val();
+                fields.telefono = $('input[name=telefono]').val();
+                fields.password = $('input[name=password]').val();
+                fields.calle = $('input[name=calle]').val();
+                fields.numero = $('input[name=numero]').val();
+                fields.tipo_usuario = this.tipo_usuario.value;
+   
                 $.ajax({
                   method: "POST",
                   data: JSON.stringify(fields),
-                  url: "http://www.seguridadlandia.com/api/usuario"
+                  url: "/api/usuario"
                 })
                 .done(function( usuarios ) {
                     console.log(usuarios);
@@ -89,6 +80,16 @@
 
 })(jQuery);
 
+function logout() {
+    $.ajax({
+      method: "GET",
+      url: "/api/logout"
+    })
+    .done(function( msg ) {
+        var url = "/";
+        window.location = url;
+    });
+}
 
 function ShowUsuarios(usuariosJSON) {
     var usuarios = eval(usuariosJSON);
@@ -102,12 +103,13 @@ function ShowUsuarios(usuariosJSON) {
 }
 
 function loginUsuario(usuario, clave) {
-    $.post( "http://www.seguridadlandia.com/api/login", { nombre: usuario, password: clave } )
+    $.post( "/api/login", { nombre: usuario, password: clave } )
         .done(function( respuesta ) {
             if(respuesta) {
-                alert(respuesta);
+                var url = "/web/" + respuesta;
+                window.location = url;
             } else {
-                $(".error-login").append("Verifica los datos ingresados");
+                $(".error-login").html("Verifica los datos ingresados");
             }
         });
 }
