@@ -57,10 +57,16 @@
 function ShowUsuarios(usuariosJSON) {
     var usuarios = eval(usuariosJSON);
     $.each(usuarios, function( index, usuario){
-        $(".usuarios table").append("<tr><th scope='row'>" 
+        var toAppend = "<tr><th scope='row'>" 
             + usuario.id + "</th><td>" 
-            + usuario.nombre + "</td><td>" 
             + usuario.apellido + "</td><td>" 
-            + usuario.email + "</td><td><a href='#'>Ver usuario</a></td></tr>");
+            + usuario.email + "</td><td>" 
+            + "<a class='editar-usuario btn btn-default' href='editarUsuario/" + usuario.id + "'>Ver usuario</a>";
+        if(usuario.tipo_usuario == 'cliente') {
+            toAppend += "</td><td><a class='btn btn-default' href='crearContrato.php?id=" + usuario.id + "&apellido=" + usuario.apellido + "'>+ Contrato</a></td></tr>";
+        } else {
+            toAppend += "<td></td></tr>";
+        }
+        $(".usuarios table").append(toAppend);
     });
 }

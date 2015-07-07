@@ -9,6 +9,6 @@
 </head>
 <body>
     <h1>Bienvenidos a segurilandia 2</h1>
-    <?php include("/web/include/login.php");?>
+
 </body>
 </html>

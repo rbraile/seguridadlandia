@@ -5,6 +5,7 @@ require("classes/Token.php");
 require("classes/Usuario.php");
 require("classes/Contrato.php");
 require("classes/Cliente.php");
+require("classes/Factura.php");
  
 \Slim\Slim::registerAutoloader();
 
@@ -21,16 +22,49 @@ $app->get('/usuario/:id', function($id) {
     getUser($id);
 });
 
+$app->get('/factura/:id', function($id) {
+    ceateFactura($id);
+});
+
 // traer un usuario
-// $app->get('/usuario/:$id', 'usuarios');
+// $app->get('/usuario/:$id', 'usuarioByid');
 
 $app->post('/contrato', 'addContract');
+$app->get('/getAllPlans', 'getAllPlans');
+
+$app->get('/getClienteHogar/:id', function($id) {
+    getClienteHogar($id);
+});
 
 $app->post('/login', 'login');
 $app->get('/logout', 'logout');
 $app->get('/hashToken', 'hashToken');
 
 $app->run();
+
+function ceateFactura($id_contrato) {
+    $factura = new Factura();
+    
+    if($id_contrato != "") {
+        // $factura->crea
+    }
+}
+
+function getClienteHogar($id) {
+    $cliente = new Cliente();
+    if($cliente->getClienteHogar($id)) {
+        $result = $cliente->getClienteHogar($id);
+        echo $result;
+    } 
+}
+
+function getAllPlans() {
+    $app = \Slim\Slim::getInstance();
+    $contrato = new Contrato();
+    $resultado = $contrato->getAllPlans();
+    echo $resultado;
+
+}
 
 function getUser($id) {
     $user = new Usuario();
@@ -72,11 +106,17 @@ function addContract() {
     $app = \Slim\Slim::getInstance();
     $contrato = new Contrato(); 
     $fields = json_decode($app->request->getBody());
-    $idContract = $contrato->setContract($fields);
-    if($idContract != 0) {
-        $contrato->addElements($fields->plan, $idContract);
+
+    if($fields->plan != "" && $fields->id_cliente != "" && $fields->id_hogar != "") {
+        $idContract = $contrato->setContract($fields);
+        if($idContract != 0) {
+            $contrato->addElements($fields->plan, $idContract);
+            echo $idContract;
+        } else {
+            echo "no se pudo ingresar el contrato";
+        }
     } else {
-        echo "no se pudo ingresar el contrato";
+        echo "errorrrrrrrrrr";
     }
 }
 
@@ -84,7 +124,7 @@ function showUsers() {
     $app = \Slim\Slim::getInstance();
     $usuario = new Usuario();
     $resultado = $usuario->getAllUsers();
-    echo  $resultado;
+    echo $resultado;
 }
 
 function hashToken() {

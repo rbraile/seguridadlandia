@@ -9,7 +9,7 @@
     <div class="container-general">
         <?php include_once("navbar.php"); ?>
         <div class="container">
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="panel panel-default">
                     <div class="panel-heading">listado de usuarios</div>
                     <div class="usuarios panel-body">
@@ -17,10 +17,10 @@
                             <thead>
                                 <tr>
                                   <th>Id</th>
-                                  <th>Nombre</th>
                                   <th>Apellido</th>
                                   <th>Email</th>
-                                  <th></th>
+                                  <th>ver</th>
+                                  <th>Contrato</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -30,7 +30,7 @@
                 </div>
             </div>
             
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="panel panel-default">
                   <div class="panel-heading">
                     <h3 class="panel-title">Acciones</h3>

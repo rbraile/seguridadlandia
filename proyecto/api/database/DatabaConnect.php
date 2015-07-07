@@ -23,6 +23,10 @@ class DatabaConnect {
         return json_encode($rowsJSON);   
     }
 
+    public function getResultAssoc($result) {
+        return $result->fetch_assoc();
+    }
+
     public function getLastId() {
     	return $this->mysqli->insert_id;
     }
