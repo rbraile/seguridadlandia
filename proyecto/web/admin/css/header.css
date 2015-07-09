@@ -2,3 +2,10 @@
 .container .navbar-wrapper .azul.navbar-inverse {
 
 }
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}

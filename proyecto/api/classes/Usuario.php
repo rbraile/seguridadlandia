@@ -56,4 +56,43 @@ class Usuario {
         return $this->conection->DBQuery($query);
     }
 
+    private function isCliente($id) {
+        $query = "SELECT COUNT(*) AS count FROM usuario WHERE tipo_usuario = 'cliente' AND id = $id";
+        $result = $this->conection->DBQuery($query); 
+        return $this->conection->getResultJSONEncode($result); 
+    }
+
+    public function editarUsuario($fields) {
+        $query = "UPDATE usuario SET 
+            nombre = '$fields->nombre', 
+            apellido = '$fields->apellido',
+            dni = $fields->dni,
+            email = '$fields->email',
+            telefono = $fields->telefono,
+            calle = '$fields->calle',
+            numero = $fields->numero
+            WHERE id = $fields->id;";
+        $this->conection->DBQuery($query);
+        return $this->conection->afffectedRows();
+    }
+
+    public function deleteUsuario($id) {
+        $count = json_decode($this->isCliente($id));
+
+        $query = "DELETE FROM usuario WHERE id = $id;";
+        $this->conection->DBQuery($query);
+        $result = $this->conection->DBQuery($query);
+        
+        if($count[0]->count == 1){
+           $this->deleteCliente($id);
+        } 
+        
+        return $this->conection->afffectedRows();
+    }
+
+    private function deleteCliente($id) {
+        $query = "DELETE FROM cliente WHERE id_usuario = $id";
+        $result = $this->conection->DBQuery($query);
+    }
+
 }
