@@ -26,6 +26,7 @@
         $("#agregar-contrato").submit(function (event) {
             event.preventDefault();
             var fields = {};
+
             if($('input[name=plan]').val() != "" && $('input[name=id_hogar]').val() && $('input[name=id_cliente]').val() != "") {
 
                 fields.plan = $('select[name=plan]').val();
@@ -37,9 +38,10 @@
                     data: JSON.stringify(fields),
                     url: "/api/contrato"
                 })
-                .done(function(repsuesta) {
-                    redirectToTime("/web/factura.php?id_factura=" + repsuesta);
-                    // $.each(usuarios, function( index, usuario){
+                .done(function(respuesta) {
+                    if(respuesta != "") {
+                       createFactura(respuesta);
+                    }
                 });                     
             } else {    
                error("/web/admin/factura.php");
@@ -48,6 +50,22 @@
 
     });
 })(jQuery);
+
+function createFactura(id_contrato) {
+    $.ajax({
+        method: "POST",
+        data: id_contrato,
+        url: "/api/factura"
+    })
+    .done(function(id_factura) {
+        console.log(id_factura);
+        if(id_factura) {
+            redirectToTime("/web/admin/factura.php?id_factura=" + id_factura);
+        } else {
+            error("/web/admin/clientes.php");
+        }
+    });          
+}
 
 function ShowPlans(plans) {
     var plans = eval(plans);
@@ -58,26 +76,4 @@ function ShowPlans(plans) {
         $(".descripcion").append("<p class='plan" + plan.id + "'>" + plan.descripcion + "</p>");
     });
     $(".descripcion .plan1").addClass("show");
-}
-
-function getUrlVars() {
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-    }
-    return vars;
-}
-
-function error(url) {
-    $(".error").removeClass("hide");
-    setTimeout(function(){window.location = url;}, 2000); 
-}
-
-function redirectToTime(url) {
-    $(".message").removeClass("hide");
-    setTimeout(function(){window.location = url;}, 2000); 
 }

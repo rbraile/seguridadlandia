@@ -16,21 +16,34 @@ $app = new \Slim\Slim(array(
 ));
 
 // traer todos usuarios
+$app->put('/usuario', 'editUser');
 $app->get('/usuario', 'showUsers');
 $app->post('/usuario', 'addUser');
+$app->post('/usuario-delete', 'deleteUser');
+
+$app->delete('/usuario/:id', function ($id) {
+    deleteUser($id);
+});
+
 $app->get('/usuario/:id', function($id) {
     getUser($id);
 });
 
 $app->get('/factura/:id', function($id) {
-    ceateFactura($id);
+    getFactura($id);
 });
+$app->post('/factura', 'addfactura');
+
 
 // traer un usuario
 // $app->get('/usuario/:$id', 'usuarioByid');
 
 $app->post('/contrato', 'addContract');
 $app->get('/getAllPlans', 'getAllPlans');
+
+$app->get('/contrato/:id', function($id) {
+    getContratoById($id);
+});
 
 $app->get('/getClienteHogar/:id', function($id) {
     getClienteHogar($id);
@@ -42,20 +55,34 @@ $app->get('/hashToken', 'hashToken');
 
 $app->run();
 
-function ceateFactura($id_contrato) {
+function getContratoById($id) {
+    $contrato = new Contrato();
+    $result = $contrato->getContratoById($id);
+    echo $result;
+}
+
+function getFactura($id) {
     $factura = new Factura();
-    
-    if($id_contrato != "") {
-        // $factura->crea
+    $resultado = $factura->getFactura($id);
+    echo $resultado;
+}
+
+function addFactura() {
+    $app = \Slim\Slim::getInstance();
+    $factura = new Factura();
+    $id_contrato = json_decode($app->request->getBody());
+    $id_factura = $factura->createFacutura($id_contrato);
+    if(!$id_factura){
+        echo "error al ingresar factura";
+    } else {
+        echo $id_factura;
     }
 }
 
 function getClienteHogar($id) {
     $cliente = new Cliente();
-    if($cliente->getClienteHogar($id)) {
-        $result = $cliente->getClienteHogar($id);
-        echo $result;
-    } 
+    $result = $cliente->getClienteHogar($id);
+    echo $result;
 }
 
 function getAllPlans() {
@@ -74,6 +101,20 @@ function getUser($id) {
     } else {
         echo false;
     }
+}
+
+function editUser() {
+    $app = \Slim\Slim::getInstance();
+    $user = new Usuario();
+    $userFields = json_decode($app->request->getBody());
+    echo $user->editarUsuario($userFields);    
+}
+
+function deleteUser($id) {
+    $app = \Slim\Slim::getInstance(); 
+    $usuario = new Usuario();
+    echo $usuario->deleteUsuario($id);
+    
 }
 
 function logout() {
@@ -120,6 +161,10 @@ function addContract() {
     }
 }
 
+function createFacutura($id_contrato) {
+
+}
+
 function showUsers() {
     $app = \Slim\Slim::getInstance();
     $usuario = new Usuario();
@@ -156,6 +201,7 @@ function login() {
 
         $_SESSION["login"] = true;
         $_SESSION["user_type"] = $userType;
+        $_SESSION["user_id"] = $id;
 
         echo $userType;
 

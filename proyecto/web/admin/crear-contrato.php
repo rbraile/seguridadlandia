@@ -39,7 +39,6 @@
                             <input class="numero" type="text" value="" name="numero" disabled="disabled" />
                             <br />
                             <input type="hidden" value="<?php echo $id;?>" name="id_cliente" />
-                            <input class="id_hogar" type="hidden" value="" name="id_hogar" />
                             <br />  
                             <br />  
                             <input type="submit" name="enviar" value="Enviar" />

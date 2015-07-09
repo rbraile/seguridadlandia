@@ -15,10 +15,9 @@ class Contrato {
 
 	public function setContract($fields) {
 		$this->ip_hogar .= $fields->id_hogar;
-		$query = "INSERT INTO contrato (id_cliente, id_hogar, plan, ip_hogar, fecha ) 
+		$query = "INSERT INTO contrato (id_cliente, plan, ip_hogar, fecha ) 
 						VALUES (
 					            '$fields->id_cliente',
-					            '$fields->id_hogar',
 					            '$fields->plan',
 					            '$this->ip_hogar',
 					            CURDATE()
@@ -63,6 +62,16 @@ class Contrato {
         $query = "SELECT * FROM plan";
         $result = $this->conection->DBQuery($query);
         return $this->conection->getResultJSONEncode($result);
+    }
+
+    public function getContratoById($id) {
+        $query = "SELECT * FROM contrato WHERE id = $id";
+        $result = $this->conection->DBQuery($query);
+        $resultado = false;
+        if($result) {
+            $resultado = $this->conection->getResultJSONEncode($result);
+        }
+        return $resultado;
     }
 
 }

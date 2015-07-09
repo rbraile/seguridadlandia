@@ -29,13 +29,13 @@
     <div class="container-general">
         <?php include_once("navbar.php"); ?>
         <div class="form-container">
-            <div class="message alert alert-success" role="alert">
-                <p>Usuario registrado correctamente</p>
-            </div>
-            <div class="error alert alert-danger" role="alert">
-                <p>No se pudo registrar el usuario intentelo nuevamente</p> 
-            </div>
             <form id="register" method="POST">
+                <div class="message alert alert-success hide" role="alert">
+                    <p>Usuario registrado correctamente</p>
+                </div>
+                <div class="error alert alert-danger hide" role="alert">
+                    <p>No se pudo registrar el usuario intentelo nuevamente</p> 
+                </div>
                 <label>Tipo de usuario</label>
                 <select id="tipo_usuario" name="tipo_usuario">
                     <option value="cliente" <?php if($usuario && $usuario[0]["tipo_usuario"] == 'cliente'){ echo 'selected';}?> >Cliente</option>
