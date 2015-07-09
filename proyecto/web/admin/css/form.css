@@ -2,12 +2,6 @@
     width: 960px;
     margin: 0 auto;
 }
-
-.error,
-.message {
-    display: none;
-}
-
 .error p {
     color: red;
 }

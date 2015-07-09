@@ -12,7 +12,7 @@
 
         $.ajax({
           method: "GET",
-          url: "http://www.seguridadlandia.com/api/usuario"
+          url: "/api/usuario"
         })
         .done(function( usuarios ) {
             ShowUsuarios(usuarios);
@@ -36,7 +36,7 @@
         $("#token").click(function() {
              $.ajax({
                   method: "GET",
-                  url: "http://www.seguridadlandia.com/api/hashToken?id=2",
+                  url: "/api/hashToken?id=2",
                 })
                 .done(function( token ) {
                     alert(token)

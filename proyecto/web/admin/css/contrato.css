@@ -1,0 +1,7 @@
+.descripcion p {
+    display: none;
+}
+
+.descripcion p.show {
+    display: block;
+}

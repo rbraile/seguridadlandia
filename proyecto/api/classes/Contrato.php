@@ -13,12 +13,11 @@ class Contrato {
 		$this->conection = new DatabaConnect();
 	}
 
-	public function setContract( $fields) {
+	public function setContract($fields) {
 		$this->ip_hogar .= $fields->id_hogar;
-		$query = "INSERT INTO contrato (id_cliente, id_hogar, plan, ip_hogar, fecha ) 
+		$query = "INSERT INTO contrato (id_cliente, plan, ip_hogar, fecha ) 
 						VALUES (
 					            '$fields->id_cliente',
-					            '$fields->id_hogar',
 					            '$fields->plan',
 					            '$this->ip_hogar',
 					            CURDATE()
@@ -33,24 +32,23 @@ class Contrato {
 		switch ($plan) {
 			case 1:
 				$this->addAllElement($this->basico, $idContrato);
-					echo $this->conection->getLastId();
+					// echo $this->conection->getLastId();
 				break;
 			case 2:
 				$this->addAllElement($this->premiun, $idContrato);
-					echo $this->conection->getLastId();
+					// echo $this->conection->getLastId();
 				break;
 			case 3:
 				$this->addAllElement($this->gold, $idContrato);
-					echo $this->conection->getLastId();
+					// echo $this->conection->getLastId();
 				break;
 			
 			default:
 				$this->addAllElement($this->basico, $idContrato);
-					echo $this->conection->getLastId();
+					// echo $this->conection->getLastId();
 				break;
 		}
 	}
-
 
 	private function addAllElement($plan, $idContrato) {
 		foreach ($plan as $idElemento => $cantidad) {					
@@ -59,5 +57,21 @@ class Contrato {
 			$this->conection->DBquery($query);
 		}
 	}
+
+    public function getAllPlans() {
+        $query = "SELECT * FROM plan";
+        $result = $this->conection->DBQuery($query);
+        return $this->conection->getResultJSONEncode($result);
+    }
+
+    public function getContratoById($id) {
+        $query = "SELECT * FROM contrato WHERE id = $id";
+        $result = $this->conection->DBQuery($query);
+        $resultado = false;
+        if($result) {
+            $resultado = $this->conection->getResultJSONEncode($result);
+        }
+        return $resultado;
+    }
 
 }
