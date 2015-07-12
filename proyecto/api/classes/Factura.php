@@ -14,6 +14,29 @@ class Factura {
         $this->conection = new DatabaConnect();
     }
 
+    public function getFacturaByClienteId($id) {
+        $query = "SELECT id FROM contrato WHERE id_cliente = $id ORDER BY id DESC LIMIT 1";
+        $result = $this->conection->DBQuery($query);
+        $resultado = false;
+        if($result) {
+            $resultado = $this->conection->getResultAssoc($result);
+            $query = "SELECT fa.id, fa.id_contrato, fa.detalle, fa.importe, fa.pago, fa.fecha, u.nombre, u.apellido, u.calle, u.numero, u.telefono
+            FROM factura fa 
+            INNER JOIN contrato co ON fa.id_contrato = co.id INNER JOIN usuario u ON co.id_cliente = u.id where fa.id_contrato =" .$resultado["id"];
+            $result = $this->conection->DBQuery($query);
+            $resultado = false;
+            if($result) {
+                echo $this->conection->getResultJSONEncode($result);
+            } else {
+                echo "error al tratar de obtener la factura";
+            }
+
+        } else {
+            echo "Error al tratar de obtener contrato id";
+        }
+    
+    }
+
     public function getFactura($id) {
         $query = "SELECT fa.id, fa.id_contrato, fa.detalle, fa.importe, fa.pago, fa.fecha, u.nombre, u.apellido, u.calle, u.numero, u.telefono
         FROM factura fa 

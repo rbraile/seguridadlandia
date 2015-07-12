@@ -1,0 +1,25 @@
+<Style id="west_campus_style">
+  <IconStyle>
+    <Icon>
+      <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png
+      </href>
+    </Icon>
+  </IconStyle>
+  <BalloonStyle>
+    <text>$[video]</text>
+  </BalloonStyle>
+</Style>
+<Placemark>
+  <name>Google West Campus 1</name>
+  <styleUrl>#west_campus_style</styleUrl>
+  <ExtendedData>
+    <Data name="video">
+      <value><![CDATA[<iframe width="640" height="360"
+        src="http://www.youtube.com/embed/ZE8ODPL2VPI" frameborder="0"
+        allowfullscreen></iframe><br><br>]]></value>
+    </Data>
+  </ExtendedData>
+  <Point>
+    <coordinates>-122.0914977709329,37.42390182131783,0</coordinates>
+  </Point>
+</Placemark>

@@ -22,7 +22,7 @@ class Usuario {
     }
 
     public function addUser($fields) {
-        $query = "INSERT INTO usuario (nombre, apellido, dni, email, telefono, password, calle, numero, tipo_usuario ) 
+        $query = "INSERT INTO usuario (nombre, apellido, dni, email, telefono, password, id_zona, calle, numero, tipo_usuario ) 
                         VALUES (
                                 '$fields->nombre',
                                 '$fields->apellido',
@@ -30,12 +30,12 @@ class Usuario {
                                 '$fields->email',
                                 '$fields->telefono',
                                 '$fields->password',
+                                1,
                                 '$fields->calle',
                                 '$fields->numero',
                                 '$fields->tipo_usuario'
                             )";
         $result = $this->conection->DBQuery($query);
-
         return $this->conection->getLastId();
     }
 
@@ -93,6 +93,16 @@ class Usuario {
     private function deleteCliente($id) {
         $query = "DELETE FROM cliente WHERE id_usuario = $id";
         $result = $this->conection->DBQuery($query);
+    }
+
+    public function getUsuarioTel($id) {
+        $query = "SELECT telefono FROM usuario WHERE id = $id";
+        $result = $this->conection->DBQuery($query);
+        $resultado = false;
+        if($result) {
+            $resultado = $this->conection->getResultJSONEncode($result);
+        }
+        return $resultado;
     }
 
 }

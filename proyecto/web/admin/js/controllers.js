@@ -1,13 +1,16 @@
 (function($) {
     $(document).ready(function() {
+        $(".logout").click(function() {
+            logout();
+        });
+        
         $("#password2").change(function() {
-            $("html, body").animate({scrollTop: 0}, 800);
-            if($("#password2").val() !== $("#password").val()) {
+            if($("#password2").val() != $("#password").val()) {
+                console.log("entro por aca");
+                $("html, body").animate({scrollTop: 0}, 800);
                 $(".error p").html("las claves no son iguales");
-                $(".error").show();
-            } else {
-                $(".error").hide();
-            }
+                $(".error").removeClass("hide");
+            } 
         });
 
         $.ajax({
@@ -39,14 +42,12 @@
               url: "/api/usuario"
             })
             .done(function( msg ) {
-                $("html, body").animate({scrollTop: 0}, 800);
-                if(msg == 1) {
-                    $(".error").hide();
-                    $(".message").show();
-                    var url = "/web/admin";
-                    setTimeout(function(){window.location = url;}, 2000);        
+                console.log(msg);
+                if(msg == "error") {     
+                    $(".error").removeClass("hide");
                 } else {
-                    $(".error").show();
+                    $("html, body").animate({scrollTop: 0}, 800);
+                    redirectToTime("/web/admin/clientes.php");       
                 }
             });
 
@@ -74,8 +75,6 @@
             })
             .done(function( respuesta ) {
                 if(respuesta) {
-                    console.log(respuesta);
-                    $("html, body").animate({scrollTop: 0}, 800);
                     redirectToTime("/web/admin/clientes.php");
                 } else {
                     error("/web/admin/clientes.php");
@@ -92,10 +91,8 @@
             .done(function( respuesta ) {
                 if(respuesta) {
                     console.log(respuesta);
-                    $("html, body").animate({scrollTop: 0}, 800);
                     redirectToTime("/web/admin/clientes.php");
                 } else {
-                    $("html, body").animate({scrollTop: 0}, 800);
                     error("/web/admin/clientes.php");
                 }
             });
@@ -113,7 +110,7 @@ function ShowUsuarios(usuariosJSON) {
             + usuario.email + "</td><td>" 
             + "<a class='editar-usuario btn btn-default' href='editar-usuario.php?id=" + usuario.id + "'>Ver usuario</a>";
         if(usuario.tipo_usuario == 'cliente') {
-            toAppend += "</td><td><a class='btn btn-default' href='crear-contrato.php?id=" + usuario.id + "&apellido=" + usuario.apellido + "'>+ Contrato</a></td></tr>";
+            toAppend += "</td><td><a class='btn btn-default' href='crear-contrato.php?id=" + usuario.id +"'>+ Contrato</a></td></tr>";
         } else {
             toAppend += "<td></td></tr>";
         }

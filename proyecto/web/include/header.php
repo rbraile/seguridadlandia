@@ -1,11 +1,6 @@
-<?php include("api/config/general.php");?>
+<meta charset="utf-8" /> 
 <script type="text/javascript" src="http://www.seguridadlandia.com/web/js/funciones.js"></script>
-<a href="#" class="logout">logout</a>
-
-<h1>Bienvenidos a segurilandia</h1>
-
-
-
+<link rel="stylesheet" type="text/css" href="../css/general.css" />
 
 
 

@@ -23,7 +23,8 @@
             </li>
             <li class=""><a href="#">Alarmas</a></li>
             <li><a href="#about">Reportes</a></li>
-            <li><a href="#contact">monitoreadores</a></li>               
+            <li><a href="#contact">monitoreadores</a></li>
+            <li><a href="#" class="logout">logout</a></li>               
           </ul>
         </div>
       </div>

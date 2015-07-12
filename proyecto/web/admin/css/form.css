@@ -5,3 +5,7 @@
 .error p {
     color: red;
 }
+
+.factura-bottom {
+    margin-bottom: 20px;
+}
