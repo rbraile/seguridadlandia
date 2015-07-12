@@ -21,4 +21,11 @@ class Cliente {
         }
         return $resultado;
     }
+
+    public function getAllClient() {
+        $query = "SELECT id, nombre, apellido, email, telefono, dni, calle, numero FROM usuario WHERE tipo_usuario = 'cliente'";
+        $result = $this->conection->DBQuery($query);
+        return $this->conection->getResultJSONEncode($result);
+    }
+
 }

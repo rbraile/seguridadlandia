@@ -80,17 +80,6 @@
 
 })(jQuery);
 
-function logout() {
-    $.ajax({
-      method: "GET",
-      url: "/api/logout"
-    })
-    .done(function( msg ) {
-        var url = "/";
-        window.location = url;
-    });
-}
-
 function ShowUsuarios(usuariosJSON) {
     var usuarios = eval(usuariosJSON);
     $.each(usuarios, function( index, usuario){

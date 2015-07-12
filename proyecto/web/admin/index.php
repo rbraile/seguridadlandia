@@ -8,11 +8,6 @@
 <body>
     <?php include_once("navbar.php"); ?>
 
-
-    <!-- Marketing messaging and featurettes
-    ================================================== -->
-    <!-- Wrap the rest of the page in another container to center all the content. -->
-
     <div class="container marketing">
 
       <!-- Three columns of text below the carousel -->

@@ -5,7 +5,7 @@ class Contrato {
 	private $basico = array(1 => 1, 2 => 1, 3 => 1, 4 => 3, 5 => 3, 6 => 1);
 	private $premiun = array(1 => 1, 2 => 1, 3 => 1, 4 => 3, 5 => 3, 6 => 2 );
 	private $gold =  array(1 => 1, 2 => 1, 3 => 1, 4 => 6, 5 => 6, 6 => 3, 7 => 1 );
-	private $ip_hogar = '192.168.10.';
+	private $ip_hogar = '192.168.10.12';
 	private $lastID = 0;
 	private $conection;
 
@@ -14,7 +14,6 @@ class Contrato {
 	}
 
 	public function setContract($fields) {
-		$this->ip_hogar .= $fields->id_hogar;
 		$query = "INSERT INTO contrato (id_cliente, plan, ip_hogar, fecha ) 
 						VALUES (
 					            '$fields->id_cliente',
@@ -32,20 +31,16 @@ class Contrato {
 		switch ($plan) {
 			case 1:
 				$this->addAllElement($this->basico, $idContrato);
-					// echo $this->conection->getLastId();
 				break;
 			case 2:
 				$this->addAllElement($this->premiun, $idContrato);
-					// echo $this->conection->getLastId();
 				break;
 			case 3:
 				$this->addAllElement($this->gold, $idContrato);
-					// echo $this->conection->getLastId();
 				break;
 			
 			default:
 				$this->addAllElement($this->basico, $idContrato);
-					// echo $this->conection->getLastId();
 				break;
 		}
 	}

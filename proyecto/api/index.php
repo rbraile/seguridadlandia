@@ -21,19 +21,24 @@ $app->get('/usuario', 'showUsers');
 $app->post('/usuario', 'addUser');
 $app->post('/usuario-delete', 'deleteUser');
 
+$app->get('/cliente', 'getAllClient');
+
 $app->delete('/usuario/:id', function ($id) {
-    deleteUser($id);
+    deleteUser(htmlspecialchars(utf8_decode(strip_tags($id))));
 });
 
 $app->get('/usuario/:id', function($id) {
-    getUser($id);
+    getUser(htmlspecialchars(utf8_decode(strip_tags($id))));
 });
 
 $app->get('/factura/:id', function($id) {
-    getFactura($id);
+    getFactura(htmlspecialchars(utf8_decode(strip_tags($id))));
 });
 $app->post('/factura', 'addfactura');
 
+$app->get('/factura-cliente/:id', function($id) {
+    getFacturaCliente(htmlspecialchars(utf8_decode(strip_tags($id))));
+});
 
 // traer un usuario
 // $app->get('/usuario/:$id', 'usuarioByid');
@@ -42,11 +47,11 @@ $app->post('/contrato', 'addContract');
 $app->get('/getAllPlans', 'getAllPlans');
 
 $app->get('/contrato/:id', function($id) {
-    getContratoById($id);
+    getContratoById(htmlspecialchars(utf8_decode(strip_tags($id))));
 });
 
 $app->get('/getClienteHogar/:id', function($id) {
-    getClienteHogar($id);
+    getClienteHogar(htmlspecialchars(utf8_decode(strip_tags($id))));
 });
 
 $app->post('/login', 'login');
@@ -55,10 +60,20 @@ $app->get('/hashToken', 'hashToken');
 
 $app->run();
 
+function getAllClient() {
+    $cliente = new Cliente();
+    echo $cliente->getAllClient();
+}
+
 function getContratoById($id) {
     $contrato = new Contrato();
     $result = $contrato->getContratoById($id);
     echo $result;
+}
+
+function getFacturaCliente($id) {
+    $factura = new Factura();
+    $factura->getFacturaByClienteId($id);
 }
 
 function getFactura($id) {
@@ -107,6 +122,15 @@ function editUser() {
     $app = \Slim\Slim::getInstance();
     $user = new Usuario();
     $userFields = json_decode($app->request->getBody());
+
+    $fields->nombre = htmlspecialchars(utf8_decode(strip_tags($fields->nombre)));
+    $fields->apellido = htmlspecialchars(utf8_decode(strip_tags($fields->apellido)));
+    $fields->dni  = htmlspecialchars(utf8_decode(strip_tags($fields->dni)));
+    $fields->email  = htmlspecialchars(utf8_decode(strip_tags($fields->email)));
+    $fields->telefono  = htmlspecialchars(utf8_decode(strip_tags($fields->telefono)));
+    $fields->calle  = htmlspecialchars(utf8_decode(strip_tags($fields->calle)));
+    $fields->numero  = htmlspecialchars(utf8_decode(strip_tags($fields->numero)));
+
     echo $user->editarUsuario($userFields);    
 }
 
@@ -128,17 +152,34 @@ function logout() {
 }
 
 function addUser() {
+    $message = false;
     $app = \Slim\Slim::getInstance();
     $fields = json_decode($app->request->getBody());
-    $user = new Usuario();
-    $message = false;
-    if($user->addUser($fields)) {
-        $message = true;
-    }
-    $result = $user->addUser($fields);
-    if($result > 0 && $fields->tipo_usuario == 'cliente') {
-        $cliente = new Cliente();
-        $cliente->addClienteRelation($result, 1);
+
+    if($fields->nombre && $fields->apellido && $fields->dni && $fields->email &&
+      $fields->telefono && $fields->password && $fields->calle && $fields->numero && 
+      $fields->tipo_usuario) {
+
+        $fields->nombre = htmlspecialchars(utf8_decode(strip_tags($fields->nombre)));
+        $fields->apellido = htmlspecialchars(utf8_decode(strip_tags($fields->apellido)));
+        $fields->dni  = htmlspecialchars(utf8_decode(strip_tags($fields->dni)));
+        $fields->email  = htmlspecialchars(utf8_decode(strip_tags($fields->email)));
+        $fields->telefono  = htmlspecialchars(utf8_decode(strip_tags($fields->telefono)));
+        $fields->password  = htmlspecialchars(utf8_decode(strip_tags($fields->password)));
+        $fields->calle  = htmlspecialchars(utf8_decode(strip_tags($fields->calle)));
+        $fields->numero  = htmlspecialchars(utf8_decode(strip_tags($fields->numero)));
+        $fields->tipo_usuario = htmlspecialchars(utf8_decode(strip_tags($fields->tipo_usuario)));
+        
+        $user = new Usuario();
+        $result = $user->addUser($fields);
+        if($result) {
+            $message = true;
+        }
+
+        if($result > 0 && $fields->tipo_usuario == 'cliente') {
+            $cliente = new Cliente();
+            $cliente->addClienteRelation(1, $result);
+        }
     }
     echo $message;
 }
@@ -148,7 +189,10 @@ function addContract() {
     $contrato = new Contrato(); 
     $fields = json_decode($app->request->getBody());
 
-    if($fields->plan != "" && $fields->id_cliente != "" && $fields->id_hogar != "") {
+    $fields->id_cliente = htmlspecialchars(utf8_decode(strip_tags($fields->id_cliente)));
+    $fields->plan = htmlspecialchars(utf8_decode(strip_tags($fields->plan)));
+
+    if($fields->plan != "" && $fields->id_cliente != "") {
         $idContract = $contrato->setContract($fields);
         if($idContract != 0) {
             $contrato->addElements($fields->plan, $idContract);
@@ -202,7 +246,12 @@ function login() {
         $_SESSION["login"] = true;
         $_SESSION["user_type"] = $userType;
         $_SESSION["user_id"] = $id;
+        if($userType == "cliente") {
+            $_SESSION["token"] = $password;
+            $telefono = json_decode($usuario->getUsuarioTel($id));
+            $_SESSION["telefono"] = $telefono[0]->telefono;
 
+        }
         echo $userType;
 
     } else {

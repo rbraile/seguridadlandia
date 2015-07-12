@@ -4,7 +4,7 @@
 <head>
     <title></title>
     <?php include_once("../include/bootstrap.php"); ?>
-    <?php include("../include/header.php");?>
+    <script type="text/javascript" src="http://www.seguridadlandia.com/web/cliente/js/webservice.js"></script>
 </head>
 <body>
     <div class="container cliente">
@@ -25,7 +25,7 @@
 
         </div>
             <ul class="botonera">
-                <li class=""><a class="btn btn-default btn-lg alert-danger" href="alarma.php">Disparar Alarma</a></li>
+                <li class=""><a class="btn btn-default btn-lg alert-danger" href="#">Disparar Alarma</a></li>
                 <li><a class="btn btn-default btn-lg alert-danger" href="tel:<?php echo $_SESSION["telefono"];?>">Realizar llamada al 911</a></li>
             </ul>
       </div><!-- /.panel panel-default -->

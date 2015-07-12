@@ -53,7 +53,7 @@
 
                 <div class="form-group">
                     <label for="telefono">Telefono:</label> 
-                    <input type="text" name="telefono" value="<?php if($usuario && $usuario[0]["telefono"] ){ echo $usuario[0]["telefono"];}else{echo 'Telefono';}?>" id="telefono" class="form-control" />
+                    <input type="number" name="telefono" value="<?php if($usuario && $usuario[0]["telefono"] ){ echo $usuario[0]["telefono"];}else{echo 'Telefono';}?>" id="telefono" class="form-control" />
                 </div>
                 
                 <div class="form-group">
@@ -63,12 +63,12 @@
                 
                 <div class="form-group">
                     <label for="numero">Numeración:</label> 
-                    <input type="text" name="numero" value="<?php if($usuario && $usuario[0]["numero"]){ echo $usuario[0]["numero"];}else{echo 'Numero';}?>" id="numero" class="form-control" />
+                    <input type="number" name="numero" value="<?php if($usuario && $usuario[0]["numero"]){ echo $usuario[0]["numero"];}else{echo 'Numero';}?>" id="numero" class="form-control" />
                 </div>
                 <input type="hidden" name="id" value="<?php echo $id;?>">
                 <div class="form-group">
                     <label for="dni">DNI:</label> 
-                    <input type="text" name="dni" value="<?php if($usuario && $usuario[0]["dni"] ){ echo $usuario[0]["dni"];}else{echo 'DNI';}?>" id="dni" class="form-control" /> <br />
+                    <input type="number" name="dni" value="<?php if($usuario && $usuario[0]["dni"] ){ echo $usuario[0]["dni"];}else{echo 'DNI';}?>" id="dni" class="form-control" /> <br />
                 </div>
                 <input class="btn btn-default" type="submit" name="editar" value="<?php if($usuario){ echo 'Editar';}else{echo 'Registrar';}?>" />
                 <a class="delete-user btn btn-default" data-id="<?php echo $id;?>" href="#">Borrar usuario</a>

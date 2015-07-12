@@ -2,3 +2,38 @@
     width: 960px;
     margin: 0 auto;
 }
+
+.botonera {
+    list-style: none;
+}
+
+.botonera li {
+    display: inline-block;
+}
+
+.cliente h1 {
+    margin-top: 0;
+}
+
+.cliente .panel {
+    padding: 20px;
+}
+
+.cliente .nav-pills {
+    padding-left: 20px; 
+    margin-bottom: 20px; 
+}
+
+.cliente .title-qr {
+    position: relative;
+}
+
+.cliente #camaras .panel {
+    text-align: center;
+}
+
+.cliente .qr {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
