@@ -1,14 +1,17 @@
 <div class="login">
     <form id="login" method="POST">
+        <h1>Ingrese a Seguridadlandia</h1>
+
         <p class="error-login" style="color: red;"></p>
         <label>
-            usuario
+            <strong>Usuario:</strong>
             <input class="usuario" type="text" name="usuario" />
         </label>
         <label>
-            clave
+            <strong>Clave:</strong>
             <input class="clave" type="password" name="clave" />
         </label>
-        <input id="enviar" type="submit" name="enviar" value="enviar" />
+        <input class="btn btn-primary" id="enviar" type="submit" name="enviar" value="Enviar" />
     </form>
 </div>
+

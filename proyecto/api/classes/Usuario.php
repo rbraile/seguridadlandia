@@ -8,11 +8,10 @@ class Usuario {
     }
 
     public function loginUser($nombre, $password) {
-        $query = "SELECT id, nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero 
+        $query = "SELECT id, nombre, apellido, email, id_zona, tipo_usuario, telefono, dni, calle, numero 
                     FROM usuario 
                     WHERE nombre = '$nombre' 
                     AND password = '$password'";
-        
         return $this->conection->DBQuery($query);
     }
 
@@ -30,7 +29,7 @@ class Usuario {
                                 '$fields->email',
                                 '$fields->telefono',
                                 '$fields->password',
-                                1,
+                                '$fields->id_zona',
                                 '$fields->calle',
                                 '$fields->numero',
                                 '$fields->tipo_usuario'
@@ -41,6 +40,12 @@ class Usuario {
 
     public function getAllUsers() {
         $query = "SELECT id, nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario";
+        $result = $this->conection->DBQuery($query);
+        return $this->conection->getResultJSONEncode($result);
+    }
+
+    public function getAllMonitoreadores() {
+        $query = "SELECT id, nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario WHERE tipo_usuario like 'monitoreador'";
         $result = $this->conection->DBQuery($query);
         return $this->conection->getResultJSONEncode($result);
     }

@@ -1,0 +1,100 @@
+.row {
+    margin: 0 auto;
+}
+
+.facturas-content {
+    margin: 20px 0 0;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+    background: white;
+    color: #0057a6 !important;
+}
+
+.navbar .dropdown-menu a {
+    color: #0057a6 !important;
+}
+
+.torta-desc {
+    display: inline-block;
+}
+
+.torta-desc span {
+    float: left;
+    line-height: 20px;
+    padding: 0 7px;
+}
+
+.torta1 {
+    display: inline-block;
+    width: 35px;
+    height: 20px;
+    background: #1E90FF; 
+}
+.torta2 {
+    display: inline-block;
+    width: 35px;
+    height: 20px;
+    background: #2E8B57; 
+}
+.torta3 {
+    display: inline-block;
+    width: 35px;
+    height: 20px;
+    background: #ADFF2F; 
+}
+
+.listado-de-alarmas {
+    width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+}
+.listado-de-alarmas table th {
+    width: 180px;
+}
+
+
+footer#footer .panel {
+    background: #0057a6;
+}
+
+footer .container { 
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+#footer h2,
+#footer a,
+#footer p {
+    color: white;
+}
+
+#footer .more-links li {
+    width: 29%;
+}
+
+#footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#footer ul li {
+    display: inline-block;
+}
+
+footer .copyright {
+    border-top: 1px solid white;
+    padding-top: 10px;  
+}
+
+footer .copyright .footer-links {
+    float: right;
+    color: #fff;
+}
+
+footer .copyright p {
+    float: left;
+}

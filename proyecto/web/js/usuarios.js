@@ -94,6 +94,7 @@ function ShowUsuarios(usuariosJSON) {
 function loginUsuario(usuario, clave) {
     $.post( "/api/login", { nombre: usuario, password: clave } )
         .done(function( respuesta ) {
+            console.log(respuesta);
             if(respuesta) {
                 var url = "/web/" + respuesta;
                 window.location = url;
