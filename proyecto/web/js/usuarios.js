@@ -80,17 +80,6 @@
 
 })(jQuery);
 
-function logout() {
-    $.ajax({
-      method: "GET",
-      url: "/api/logout"
-    })
-    .done(function( msg ) {
-        var url = "/";
-        window.location = url;
-    });
-}
-
 function ShowUsuarios(usuariosJSON) {
     var usuarios = eval(usuariosJSON);
     $.each(usuarios, function( index, usuario){
@@ -105,6 +94,7 @@ function ShowUsuarios(usuariosJSON) {
 function loginUsuario(usuario, clave) {
     $.post( "/api/login", { nombre: usuario, password: clave } )
         .done(function( respuesta ) {
+            console.log(respuesta);
             if(respuesta) {
                 var url = "/web/" + respuesta;
                 window.location = url;

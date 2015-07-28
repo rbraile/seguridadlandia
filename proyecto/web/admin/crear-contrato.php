@@ -10,7 +10,6 @@
 <body>
     <?php
         $id = $_GET["id"];
-        $apellido = $_GET["apellido"];
     ?>
     <div class="container-general">
         <?php include_once("navbar.php"); ?>
@@ -19,7 +18,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Formulario de alta de contrato</div>
                     <div class="usuarios panel-body">
-                        <h2>Creación de contrato para el usuario <strong><?php echo $apellido?></strong></h2>
+                        <h2>Creación de contrato para el usuario <strong class="nombre"></strong></h2>
                         <div class="hide error alert alert-danger" role="alert">
                             <p>Este usuario no existe o no tiene hogar relacionado verifique sus datos</p>
                         </div>

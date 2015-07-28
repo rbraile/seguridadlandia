@@ -57,7 +57,7 @@
             </div>
         </div>
     </div>
-    <div class="content">
+    <div class="content factura-bottom">
         <table style="width: 100%;border: 1px solid #000">
             <thead style="background-color: #ccc;">
                 <tr>
@@ -71,6 +71,7 @@
             </thead>
         </table>
     </div>
+    <a class="btn btn-default" href="clientes.php">Volver</a>
 </div>
 </body>
 </html>

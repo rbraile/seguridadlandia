@@ -8,11 +8,10 @@ class Usuario {
     }
 
     public function loginUser($nombre, $password) {
-        $query = "SELECT id, nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero 
+        $query = "SELECT id, nombre, apellido, email, id_zona, tipo_usuario, telefono, dni, calle, numero 
                     FROM usuario 
                     WHERE nombre = '$nombre' 
                     AND password = '$password'";
-        
         return $this->conection->DBQuery($query);
     }
 
@@ -22,7 +21,7 @@ class Usuario {
     }
 
     public function addUser($fields) {
-        $query = "INSERT INTO usuario (nombre, apellido, dni, email, telefono, password, calle, numero, tipo_usuario ) 
+        $query = "INSERT INTO usuario (nombre, apellido, dni, email, telefono, password, id_zona, calle, numero, tipo_usuario ) 
                         VALUES (
                                 '$fields->nombre',
                                 '$fields->apellido',
@@ -30,17 +29,23 @@ class Usuario {
                                 '$fields->email',
                                 '$fields->telefono',
                                 '$fields->password',
+                                '$fields->id_zona',
                                 '$fields->calle',
                                 '$fields->numero',
                                 '$fields->tipo_usuario'
                             )";
         $result = $this->conection->DBQuery($query);
-
         return $this->conection->getLastId();
     }
 
     public function getAllUsers() {
         $query = "SELECT id, nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario";
+        $result = $this->conection->DBQuery($query);
+        return $this->conection->getResultJSONEncode($result);
+    }
+
+    public function getAllMonitoreadores() {
+        $query = "SELECT id, nombre, apellido, email, tipo_usuario, telefono, dni, calle, numero FROM usuario WHERE tipo_usuario like 'monitoreador'";
         $result = $this->conection->DBQuery($query);
         return $this->conection->getResultJSONEncode($result);
     }
@@ -93,6 +98,16 @@ class Usuario {
     private function deleteCliente($id) {
         $query = "DELETE FROM cliente WHERE id_usuario = $id";
         $result = $this->conection->DBQuery($query);
+    }
+
+    public function getUsuarioTel($id) {
+        $query = "SELECT telefono FROM usuario WHERE id = $id";
+        $result = $this->conection->DBQuery($query);
+        $resultado = false;
+        if($result) {
+            $resultado = $this->conection->getResultJSONEncode($result);
+        }
+        return $resultado;
     }
 
 }

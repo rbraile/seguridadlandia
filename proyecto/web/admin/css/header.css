@@ -9,3 +9,19 @@
 .show {
     display: block;
 }
+
+nav.navbar {
+    margin-bottom: 0;
+    background: #0057a6;
+}
+.navbar a {
+    color: white !important;
+}
+
+.navbar .active {
+}
+
+.navbar .active a {
+    background: white !important;
+    color: #0057a6 !important;
+}

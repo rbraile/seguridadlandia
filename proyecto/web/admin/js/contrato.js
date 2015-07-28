@@ -13,11 +13,13 @@
             $('.plan' + $(event.currentTarget).val()).addClass("show");
         });
 
-        $.getJSON("http://www.seguridadlandia.com/api/getClienteHogar/" + getUrlVars()['id'], {format: "json"}, function(data) { 
+        $.getJSON("http://www.seguridadlandia.com/api/usuario/" + getUrlVars()['id'], {format: "json"}, function(data) { 
             if(!!data.length) { 
-                $(".id_hogar").val(data[0].id_hogar);
-                $(".calle").val(data[0].calle); 
-                $(".numero").val(data[0].numero); 
+                var dato = data[0];
+                $(".id_hogar").val(data.id_hogar);
+                $(".calle").val(dato.calle); 
+                $(".numero").val(dato.numero); 
+                $(".nombre").text(dato.nombre + " " + dato.apellido)
             } else {    
                error("/web/admin/clientes.php");
             }
@@ -27,10 +29,9 @@
             event.preventDefault();
             var fields = {};
 
-            if($('input[name=plan]').val() != "" && $('input[name=id_hogar]').val() && $('input[name=id_cliente]').val() != "") {
+            if($('input[name=plan]').val() != "" && $('input[name=id_cliente]').val() != "") {
 
                 fields.plan = $('select[name=plan]').val();
-                fields.id_hogar = $('input[name=id_hogar]').val();
                 fields.id_cliente = $('input[name=id_cliente]').val();
 
                 $.ajax({

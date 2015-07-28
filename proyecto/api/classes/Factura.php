@@ -8,13 +8,65 @@ class Factura {
     private $detalle;
    
 
-// 6200 7700 11600 
-
     public function Factura() {
         $this->conection = new DatabaConnect();
     }
 
+    public function getFacturaByClienteId($id) {
+
+            $query = "SELECT fa.id, fa.id_contrato, fa.detalle, fa.importe, fa.pago, fa.fecha, u.nombre, u.apellido, u.calle, u.numero, u.telefono
+            FROM factura fa 
+            INNER JOIN contrato co ON fa.id_contrato = co.id INNER JOIN usuario u ON co.id_cliente = u.id where fa.id =" . $id;
+            $result = $this->conection->DBQuery($query);
+            $resultado = false;
+            if($result) {
+                echo $this->conection->getResultJSONEncode($result);
+            } else {
+                echo "error al tratar de obtener la factura";
+            }
+    }
+
+    public function pagarFactura($id) {
+        $query = "UPDATE factura SET 
+            pago = 1
+            WHERE id = $id;";
+        $this->conection->DBQuery($query);
+        echo $this->conection->afffectedRows();
+    }
+
+    public function facturaEnvio($id) {
+        $query = "SELECT id, plan FROM contrato WHERE id_cliente = $id";
+        $resultado = $this->conection->DBQuery($query);
+        $result = $this->conection->getResultAssoc($resultado);
+        $importe = 0;
+        if($result["plan"] == 1) {
+            $importe = "600";
+        }
+        if($result["plan"] == 2) {
+            $importe = "800";
+        }
+        if($result["plan"] == 3) {
+            $importe = "1000";
+        }
+        $resultado2 = false;
+        $query2 = "INSERT INTO factura(id_contrato, detalle, importe, pago, fecha, id_cliente) VALUES (" . $result['id'] . ", 'factura mensual', " . $importe . " , 0, NOW(), $id)";
+        $result2 = $this->conection->DBQuery($query2);
+        $lastId = $this->conection->getLastId($result2);
+        if($lastId) {
+            echo $lastId;
+        } else {
+            echo "error al tratar de obtener la factura";
+        }
+    }
+
+    public function getFacturasByCliente($id) {
+        $query = "SELECT * FROM factura WHERE id_cliente = $id";
+        $result = $this->conection->DBQuery($query);
+        echo $this->conection->getResultJSONEncode($result);
+    }
+
     public function getFactura($id) {
+
         $query = "SELECT fa.id, fa.id_contrato, fa.detalle, fa.importe, fa.pago, fa.fecha, u.nombre, u.apellido, u.calle, u.numero, u.telefono
         FROM factura fa 
         INNER JOIN contrato co ON fa.id_contrato = co.id INNER JOIN usuario u ON co.id_cliente = u.id where fa.id = $id";
@@ -42,7 +94,7 @@ class Factura {
         $resultado = false;
         if($result) {
             $resultado = $this->conection->getResultJSONEncode($result);
-            var_dump($result);
+            echo $result;
         }
         return $resultado;
     }
@@ -98,5 +150,11 @@ class Factura {
         $plan = json_decode($result);
         $id_plan = intval($plan[0]->plan);
         return $id_plan;
+    }
+
+    public function getAllFactura() {
+        $query = "SELECT * FROM factura";
+        $resultado = $this->conection->DBQuery($query);
+        return $this->conection->getResultJSONEncode($resultado);
     }
 }

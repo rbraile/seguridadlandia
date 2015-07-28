@@ -1,6 +1,6 @@
 (function($) {
     $(document).ready(function() {
-        $.getJSON("http://www.seguridadlandia.com/api/factura/" + getUrlVars()['id_factura'], {format: "json"}, function(data) { 
+        $.getJSON("http://www.seguridadlandia.com/api/facturas/" + getUrlVars()['id_factura'], {format: "json"}, function(data) { 
             if(!!data.length) {
                 var dato = data[0];
                 var fecha = dato.fecha.split("-"); 
@@ -22,7 +22,7 @@
                     $(".total").html("<tr style='text-align:right;'><td></td><td></td><td><strong>TOTAL</strong></td><td><strong style='padding-right: 10px;'>" + total + "</strong></td>");
 
             } else {
-               error("/web/admin/clientes.php");
+               // error("/web/admin/clientes.php");
             }
         });
         
