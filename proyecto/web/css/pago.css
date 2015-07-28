@@ -1,0 +1,75 @@
+.clearfix:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+     }
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+
+.success,
+.pago {
+    width: 500px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 0 auto;
+    color: #000;
+}
+
+.pago h3 {
+    border-bottom: 2px solid #0057a6;
+    color: #0057a6;
+    padding-bottom: 10px;
+}
+
+.pago .left {
+    padding-bottom: 10px;
+}
+
+.pago .right {
+    text-align: center;
+}
+
+.pago .btn {
+    border-color: #0057a6;
+    color: #0057a6; 
+}
+
+.pago .acciones {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.pago label {
+    width: 80px;
+}
+
+.success-msg {
+    width: 100%;
+    margin: 0;
+}
+
+.success-msg h2 {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.success-msg img {
+    width: 225px;
+    display: block;
+    margin: 0 auto;
+}
+
+.error {
+    width: 500px;
+    margin: 20px auto 0;
+}
+
+.error .alert {
+    height: 100px;
+}
+

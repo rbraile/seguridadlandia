@@ -18,9 +18,10 @@
                                 <tr>
                                   <th>Id</th>
                                   <th>Apellido</th>
-                                  <th>Email</th>
+                                  <th>Tipo de usuario</th>
                                   <th>ver</th>
                                   <th>Contrato</th>
+                                  <th>Factura</th>
                                 </tr>
                             </thead>
                             <tbody>

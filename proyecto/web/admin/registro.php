@@ -43,6 +43,7 @@
                     <option value="monitoreador" <?php if($usuario && $usuario[0]["tipo_usuario"] == 'monitoreador'){ echo 'selected';}?>>Monitoreador</option>
                     <option value="admin" <?php if($usuario && $usuario[0]["tipo_usuario"] == 'admin'){ echo 'selected';}?>>Administrador</option>
                 </select>
+
                 <div class="form-group">
                     <label for="nombre">Nombre:</label> 
                     <input id="nombre" placeholder="<?php if($usuario && $usuario[0]["nombre"] ){ echo $usuario[0]["nombre"];}else{echo 'Nombre';}?>" tipe="text" name="nombre" class="form-control" />
@@ -70,6 +71,15 @@
                 <div class="form-group">
                     <label for="telefono">Telefono:</label> 
                     <input type="number" name="telefono" placeholder="<?php if($usuario && $usuario[0]["telefono"] ){ echo $usuario[0]["telefono"];}else{echo 'Telefono';}?>" id="telefono" class="form-control" />
+                </div>
+
+                <div class="form-group zona">
+                    <label>Zona</label>
+                    <select id="zona" name="zona">
+                        <option value="1">San justo</option>
+                        <option value="2">Ramos Mejia</option>
+                        <option value="3">Moron</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">

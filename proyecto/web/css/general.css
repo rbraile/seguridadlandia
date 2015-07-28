@@ -5,6 +5,7 @@
 
 .botonera {
     list-style: none;
+    padding: 20px;
 }
 
 .botonera li {
@@ -16,7 +17,11 @@
 }
 
 .cliente .panel {
-    padding: 20px;
+    padding: 0;
+}
+
+nav.navbar {
+    margin-bottom: 0;
 }
 
 .cliente .nav-pills {
@@ -24,8 +29,9 @@
     margin-bottom: 20px; 
 }
 
-.cliente .title-qr {
+.cliente .panel .title-qr {
     position: relative;
+    margin: 0;
 }
 
 .cliente #camaras .panel {
@@ -33,7 +39,121 @@
 }
 
 .cliente .qr {
-    position: absolute;
-    top: 0;
-    right: 0;
+    padding: 20px;
+}
+
+.contenido {
+    min-height: 340px;
+}
+
+.cliente .contenido .datos {
+    float: left;
+    margin-right: 20px;
+}
+.cliente .contenido .personales {
+    padding-top: 20px;
+}
+
+.cliente #mapa-cliente {
+    width: 200px;
+    height: 200px;
+    float: right;
+    margin-right: 10px;
+}
+
+.navbar {
+    background: #0057a6;
+}
+.navbar a {
+    color: white !important;
+}
+
+.navbar .active {
+}
+
+.navbar .active a {
+    background: white !important;
+    color: #0057a6 !important;
+}
+
+.row.content-mapa {
+    margin: 0;
+}
+
+.list-camaras {
+    text-align: center;
+}
+
+.list-camaras li {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+#camaras-mo img {
+    display: block;
+    width: 644px;
+    margin: 0 auto;
+}
+
+.camaras-content {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#mapa {
+    position: inherit;
+    width: 100%;
+    height: 400px;
+}
+
+
+footer#footer .panel {
+    background: #0057a6;
+    margin-bottom: 0;
+}
+
+footer .container { 
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+#footer h2,
+#footer a,
+#footer p {
+    color: white;
+}
+
+#footer .more-links li {
+    width: 29%;
+}
+
+#footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#footer ul li {
+    display: inline-block;
+}
+
+footer .copyright {
+    border-top: 1px solid white;
+    padding-top: 10px;  
+}
+
+footer .copyright .footer-links {
+    float: right;
+    color: #fff;
+}
+
+footer .copyright p {
+    float: left;
+}
+
+.list-camaras {
+    list-style: none;
+    position: relative;
+    top:0;
+    left: 0;
 }

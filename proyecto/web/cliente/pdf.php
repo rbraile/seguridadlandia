@@ -2,7 +2,7 @@
 
  include_once("../include/verify-cliente.php"); 
     $id = $_SESSION["user_id"];
-        $URL = "http://www.seguridadlandia.com/api/factura-cliente/$id";
+        $URL = "http://www.seguridadlandia.com/api/facturas/" . $_GET['id'];
         $factura = json_decode(file_get_contents($URL), true)[0];
         $fecha = $factura["fecha"];
 
@@ -12,12 +12,12 @@ $html = "<!DOCTYPE html><html>
 <body>
 <div class='contenedor clearfix' style='width:960px;margin:20px auto;padding: 20px; border: 2px solid #ccc;'>
     <table width='960px'>
-        <tr><td  width='50%'><p style='margin-bottom: 0'>Seguridadlandia S.A.</p></td><td width='50%'><p class='numero-factura'>Numero de factura <span>" . $factura['id'] ."</span></p></td></tr>
+        <tr><td  width='50%'><p style='margin-bottom: 0'>Seguridadlandia S.A.</p></td><td width='50%'></td></tr>
         <tr><td  width='50%'><p style='margin-bottom: 0'>Dr. Ignacio Arieta 3000</p></td><td width='50%'><p class='numero-factura'>Numero de factura <span>" . $factura['id'] . "</span></p></td></tr>
-        <tr><td  width='50%'><p style='margin-bottom: 0'>Codigo postal 1754</p></td><td width='50%'><p class='fecha'>Fecha: <span>" . $fecha[2] . "-" . $fecha[1] . "-" . $fecha[0] . "</span></p></td></tr>
-        <tr><td  width='50%'><p style='margin-bottom: 0'>0810-3030-333</p></td><td width='50%'><p class='nombre'>Nombre:" . $factura['nombre'] . ' ' . $factura['apellido'] . " </p></td></tr>
-        <tr><td  width='50%'><p style='margin-bottom: 0'>La matanza, Buenos Aires</p></td><td width='50%'><p class='calle'>Direccion:" . $factura['calle'] . $factura['numero'] . "</p></td></tr>
-        <tr><td  width='50%'></td><td width='50%'><p class='telefono'>Telefono:" . $factura['telefono'] . "</p></td></tr>
+        <tr><td  width='50%'><p style='margin-bottom: 0'>Codigo postal 1754</p></td><td width='50%'><p class='fecha'>Fecha: <span>" . $fecha . "</span></p></td></tr>
+        <tr><td  width='50%'><p style='margin-bottom: 0'>0810-3030-333</p></td><td width='50%'><p class='nombre'>Nombre :" . $_SESSION['nya'] . " </p></td></tr>
+        <tr><td  width='50%'><p style='margin-bottom: 0'>La matanza, Buenos Aires</p></td><td width='50%'><p class='calle'>Direccion: " . $_SESSION["dire"] . "</p></td></tr>
+        <tr><td  width='50%'></td><td width='50%'><p class='telefono'>Telefono: " . $_SESSION['telefono'] . "</p></td></tr>
     </table>
     <div class='content'>
         <table style='width: 700px;border: 1px solid #000'>
@@ -29,16 +29,21 @@ $html = "<!DOCTYPE html><html>
                     <th style='width:15%;text-align: center; height:30px;'>Importe</th>
                 </tr>
             </thead>
-            <tbody class='detalle'>";                             
+            <tbody class='detalle'>";
+            echo $factura['detalle'];                    
             $rows = explode('/', $factura['detalle']);
             $html_rows = "";
-            foreach($rows AS $row) {
-                if($row != '') {
-                    $item = explode(',', $row);
-                    $cantidad = intval($item[1]);
-                    $precio= intval($item[2]);
-                    $importe = $precio * $cantidad;
-                    $html_rows .= "<tr style='height: 30px;text-align:center;border-bottom: 1px solid #ccc'><td> $item[0]</td><td>$precio </td><td>$cantidad</td><td>$importe</td></tr>";
+            if(count($rows) == 1) {
+                 $html_rows .= "<tr style='height: 30px;text-align:center;border-bottom: 1px solid #ccc'><td>Factura mensual</td><td>1</td><td></td><td>" . $factura["importe"] . "</td></tr>";
+            } else {                
+                foreach($rows AS $row) {
+                    if($row != '') {
+                        $item = explode(',', $row);
+                        $cantidad = intval($item[1]);
+                        $precio= intval($item[2]);
+                        $importe = $precio * $cantidad;
+                        $html_rows .= "<tr style='height: 30px;text-align:center;border-bottom: 1px solid #ccc'><td> $item[0]</td><td>$precio </td><td>$cantidad</td><td>$importe</td></tr>";
+                    }
                 }
             }
 $html .= $html_rows;

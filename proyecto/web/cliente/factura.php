@@ -1,10 +1,4 @@
-<?php include_once("../include/verify-cliente.php"); 
-    $id = $_SESSION["user_id"];
-        $URL = "http://www.seguridadlandia.com/api/factura-cliente/$id";
-        $factura = json_decode(file_get_contents($URL), true)[0];
-        $fecha = $factura["fecha"];
-
-?>
+<?php include_once("../include/verify-cliente.php");?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +19,11 @@
         * html .clearfix { height: 1%; }
         .clearfix { display: block; }
         /* close commented backslash hack */
+        .pagar-factura {
+            display: inline-block;
+        }
     </style>
+    <script type="text/javascript" src="js/factura.js"></script>
 </head>
 <body>
 <div class="contenedor clearfix" style="width:960px;margin:20px auto;padding: 20px; border: 2px solid #ccc;">
@@ -45,14 +43,14 @@
         </div>
         <div class="right" style="float:right; width: 40%;">
             <div class="factura-fecha" style=" background-color: #ccc;padding: 20px; border: 1px solid #999;">
-                <p class="numero-factura">Numero de factura <span><?php echo $factura["id"];?></span></p>
-                <p class="fecha">Fecha: <span><?php echo $fecha[2] . "-" . $fecha[1] . "-" . $fecha[0];?></span></p>
+                <p class="numero-factura">Numero de factura <span><?php echo $_GET["id_factura"];?></span></p>
+                <p class="fecha">Fecha: <span></span></p>
             </div>
             <div class="cliente">
                 <h4>Cliente:</h4>
-                <p class="nombre">Nombre: <?php echo $factura["nombre"] . " " . $factura["apellido"]?></p>
-                <p class="calle">Dirección: <?php echo $factura["calle"] . " " . $factura["numero"]?></p>
-                <p class="telefono">Telefono: <?php echo $factura["telefono"];?></p>
+                <p class="nombre">Nombre: <?php echo $_SESSION["nya"];?></p>
+                <p class="calle">Dirección: <?php echo $_SESSION["dire"];?></p>
+                <p class="telefono">Telefono: <?php echo $_SESSION["telefono"];?></p>
             </div>
         </div>
     </div>
@@ -69,26 +67,22 @@
                 <tfoot style="background-color: #ccc;height:35px;" class="total"></tfoot>
             </thead>
             <tbody>                
-                <?php
-                    $rows = explode("/", $factura["detalle"]);
-                    $total = $factura["importe"];
-                    foreach($rows AS $row) {
-                        if($row != "") {
-                            $item = explode(",", $row);
-                            $precio = intval($item[1]);
-                            $cantidad = intval($item[2]);
-                            $importe = $precio * $cantidad;
-                            echo "<tr style='height: 30px;text-align:center;border-bottom: 1px solid #ccc'><td>" . $item[0] . "</td><td>" . $precio . "</td><td>" . $cantidad . "</td><td>" . $importe . "</td></tr>";
-                        }
-                    }
-                    echo "<tr style='background-color:#ccc;text-align:right;'><td></td><td></td><td><strong>TOTAL</strong></td><td><strong style='padding-right: 10px;'>" . $total . "</strong></td>";
-                ?>
+               
             </tbody>
         </table>
     </div>
     <br />
-    <a class="btn btn-default" href="pdf.php">Descargar pdf</a>
-    <a class="btn btn-default" href="index.php">Volver</a>
+    <a class="btn btn-default" href="pdf.php?id=<?php echo $_GET['id_factura'];?>">Descargar pdf</a>
+    <form class="pagar-factura" action="pagar.php" method="POST">
+        <input type="hidden" name="importe" value="" />
+        <input type="hidden" name="fecha" value="" />
+        <input type="hidden" name="nombre" value="" />
+        <input type="hidden" name="dire" value="" />
+        <input type="hidden" name="pago" value="" />
+        <input type="hidden" name="id" value="<?php echo $_GET['id_factura'];?>" />
+        <input class="btn btn-default" type="submit" value="Pagar factura" />
+    </form>
+    <a class="btn btn-default" href="/web/cliente/facturas.php?id=<?php echo $_SESSION['user_id'];?>">Volver</a>
 </div>
 </body>
 </html>
